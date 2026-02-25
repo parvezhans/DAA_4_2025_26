@@ -1,0 +1,96 @@
+//session 19
+//Prims algo
+
+class Solution {
+public:
+    int spanningTree(int V, vector<vector<int>> edges) {
+        vector<vector<pair<int,int>>> adj(V);
+        
+        for(auto &e : edges) {
+            int u = e[0];
+            int v = e[1];
+            int wt = e[2];
+            adj[u].push_back({v, wt});
+            adj[v].push_back({u, wt});
+        }
+
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        vector<bool> visited(V, false);
+        
+        pq.push({0, 0});
+        int sum = 0;
+
+        while(!pq.empty()) {
+            auto it = pq.top();
+            pq.pop();
+            
+            int wt = it.first;
+            int node = it.second;
+
+            if(visited[node]) continue;
+
+            visited[node] = true;
+            sum += wt;
+
+            for(auto &neighbor : adj[node]) {
+                if(!visited[neighbor.first]) {
+                    pq.push({neighbor.second, neighbor.first});
+                }
+            }
+        }
+
+        return sum;
+    }
+};
+
+//kruskal algo
+class Solution {
+public:
+    vector<int> parent, rankv;
+
+    int find(int x) {
+        if (parent[x] == x) return x;
+        return parent[x] = find(parent[x]);
+    }
+
+    void unite(int x, int y) {
+        int px = find(x);
+        int py = find(y);
+        if (px == py) return;
+
+        if (rankv[px] < rankv[py]) parent[px] = py;
+        else if (rankv[px] > rankv[py]) parent[py] = px;
+        else {
+            parent[py] = px;
+            rankv[px]++;
+        }
+    }
+
+    int kruskalsMST(int V, vector<vector<int>> &edges) {
+        parent.resize(V);
+        rankv.assign(V, 0);
+
+        for (int i = 0; i < V; i++)
+            parent[i] = i;
+
+        sort(edges.begin(), edges.end(), [](vector<int> &a, vector<int> &b) {
+            return a[2] < b[2];
+        });
+
+        int cost = 0;
+
+        for (auto &e : edges) {
+            int u = e[0];
+            int v = e[1];
+            int w = e[2];
+
+            if (find(u) != find(v)) {
+                unite(u, v);
+                cost += w;
+            }
+        }
+
+        return cost;
+    }
+};
+
