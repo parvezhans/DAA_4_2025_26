@@ -1,0 +1,43 @@
+# Recurrence Relation of Matrix Multiplication
+
+## Step 1: Problem
+
+Multiply two matrices of size **n × n**.
+
+## Step 2: Divide
+
+Divide both matrices into **4 submatrices** of size **(n/2 × n/2)**.
+
+## Step 3: Multiplication
+
+To compute the result matrix we need **8 multiplications** of size **(n/2 × n/2)**.
+
+## Step 4: Recurrence Relation
+
+T(n) = 8T(n/2) + O(n²)
+
+Where:
+
+ 8 recursive multiplications
+  O(n²) for addition of matrices
+
+## Step 5: Solve using Master Theorem
+
+T(n) = aT(n/b) + f(n)
+
+Here:
+a = 8
+b = 2
+f(n) = n²
+
+n^(log₂8) = n³
+
+Since n² < n³
+
+## Final Result
+
+T(n) = Θ(n³)
+
+So the time complexity of matrix multiplication is:
+
+O(n³)
